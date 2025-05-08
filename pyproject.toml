@@ -1,0 +1,49 @@
+[tool.poetry]
+name = "fast-zero"
+version = "0.1.0"
+description = ""
+authors = ["Ludovico Monjardim <98127961+ludovicomonjardim@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{ include = "fast_zero", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.12"
+fastapi = { extras = ["standard"], version = ">=0.115.12,<0.116.0" }
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.11.8"
+pytest = "^8.3.5"
+pytest-cov = "^6.1.1"
+taskipy = "^1.14.1"
+
+[tool.taskipy.tasks]
+dev = "uvicorn fast_zero.main:app --reload"
+test = "pytest -x --disable-warnings"
+lint = "ruff check src"
+format = "black src"
+migrate = "alembic upgrade head"
+makemigrations = "alembic revision --autogenerate -m 'new revision'"
+
+[tool.poetry.plugins."poetry.plugin"]
+taskipy = "taskipy.plugin"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pytestpaths = "."
+addopts = "-p no:warnings"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+extend-exclude = ["migrations"]
+
+[tool.ruff.format]
+preview = true
+quote-style = "single"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "PL", "PT"]
+ignore = []
