@@ -7,12 +7,11 @@ if "%CMD%"=="test" goto TEST
 if "%CMD%"=="post_test" goto POST_TEST
 if "%CMD%"=="lint" goto LINT
 if "%CMD%"=="format" goto FORMAT
-if "%CMD%"=="migrate" goto MIGRATE
-if "%CMD%"=="makemigrations" goto MAKEMIGRATIONS
 
 goto HELP
 
 :RUN
+REM poetry run fastapi dev src/fast_zero/app.py --host 0.0.0.0 --port 8000
 poetry run fastapi dev src/fast_zero/app.py
 goto END
 
@@ -38,14 +37,6 @@ poetry run ruff check src --fix
 poetry run ruff format src
 goto END
 
-:MIGRATE
-poetry run alembic upgrade head
-goto END
-
-:MAKEMIGRATIONS
-poetry run alembic revision --autogenerate -m "nova revisao"
-goto END
-
 :HELP
 echo.
 echo Comando "%CMD%" nao reconhecido.
@@ -55,7 +46,5 @@ echo   run             - Iniciar servidor FastAPI (modo dev)
 echo   test            - Executar testes com pytest
 echo   lint            - Rodar ruff (linter)
 echo   format          - Corrigir estilo e formatar com black
-echo   migrate         - Executar migracoes com alembic
-echo   makemigrations  - Criar nova revisao com alembic
 
 :END
