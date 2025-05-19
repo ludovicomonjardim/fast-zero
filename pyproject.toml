@@ -11,6 +11,8 @@ python = ">=3.12"
 fastapi = { extras = ["standard"], version = ">=0.115.12,<0.116.0" }
 uvicorn = "^0.34.0"  # ^ para permitir atualizações de patch e minor
 sqlalchemy = "^2.0.41"
+pydantic-settings = "^2.9.1"
+alembic = "^1.15.2"
 
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.11.8"

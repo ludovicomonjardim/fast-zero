@@ -40,6 +40,7 @@ def update_user(user_id: int, user: UserSchema):
         raise HTTPException(status_code=HTTPStatus.NOT_FOUND, detail='Usuário não encontrado')
 
     user_with_id = UserDB(id=user_id, **user.model_dump())
+
     database[user_id - 1] = user_with_id
     return user_with_id
 

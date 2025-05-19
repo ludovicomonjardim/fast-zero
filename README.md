@@ -23,11 +23,35 @@ O objetivo é dominar o desenvolvimento moderno de APIs REST com Python utilizan
 
 ```
 fast_zero/
+├── .github/
+├── .venv/
+├── htmlcov/
+├── migrations/
+│   ├── versions/
+│   ├── env.py
+│   ├── README
+│   └── script.py.mako
 ├── src/
 │   └── fast_zero/
-│       └── app.py          # Aplicação principal FastAPI
-├── task.bat                # Script auxiliar para automação de tarefas
+│       ├── __init__.py
+│       ├── app.py          # Aplicação principal FastAPI
+│       ├── models.py
+│       ├── schemas.py
+│       └── settings.py          
+├── tests/
+│       ├── __init__.py
+│       ├── conftest.py
+│       ├── test_app.py
+│       └── test_db.py          
+├── .coverage
+├── .env 
+├── .gitignore
+├── alembic.ini
+├── database.db
+├── desktop.ini
+├── poetry.lock
 ├── pyproject.toml          # Configuração do projeto (Poetry)
+├── task.bat                # Script auxiliar para automação de tarefas
 └── README.md               # Este arquivo
 ```
 
