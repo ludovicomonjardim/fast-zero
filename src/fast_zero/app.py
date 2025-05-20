@@ -1,9 +1,9 @@
 from http import HTTPStatus
-# from http.client import HTTPException
-
-from fastapi import FastAPI, HTTPException
-
+from fastapi import FastAPI, HTTPException, Depends
+from sqlalchemy import select
+from fast_zero.models import User
 from fast_zero.schemas import Message, UserDB, UserList, UserPublic, UserSchema
+from fast_zero.database import get_session
 
 app = FastAPI()
 database = []
@@ -16,10 +16,35 @@ def read_root():
 
 
 @app.post('/user/', status_code=HTTPStatus.CREATED, response_model=UserPublic)
-def create_user(user: UserSchema):
-    user_with_id = UserDB(id=len(database) + 1, **user.model_dump())
-    database.append(user_with_id)
-    return user_with_id
+def create_user(user: UserSchema, session=Depends(get_session)):
+
+    db_user = session.scalar(
+        select(User).where(
+            (User.username == user.username) | (User.email == user.email)
+        )
+    )
+
+    if db_user:
+        if db_user.username == user.username:
+            raise HTTPException(
+                status_code=HTTPStatus.CONFLICT,
+                detail='Nome de usuário já existe'
+            )
+        if db_user.email == user.email:
+            raise HTTPException(
+                status_code=HTTPStatus.CONFLICT,
+                detail='Email já existe'
+            )
+
+    # db_user = User(**user.model_dump())
+    db_user = User(user.username, email=user.email, password=user.password)
+
+    session.add(db_user)
+    session.commit()
+    session.refresh(db_user)
+
+    return db_user
+
 
 
 @app.get('/user/', response_model=UserList)
